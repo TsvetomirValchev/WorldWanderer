@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Destination Detective</string>
+    <string name="final_score_value">00000</string>
+    <string name="guesses_done">1/5</string>
+    <string name="current_round">Round 1</string>
+    <string name="your_points_for_this_guess">You got 4501 points</string>
+    <string name="miles_away_from_answer">You are 97 miles away</string>
+    <string name="next_round">Next Round</string>
+    <string name="floating_button">floating button</string>
+    <string name="image_button">ImageButton</string>
+    <string name="pin">Pin</string>
+    <string name="total_miles_away">1234 miles</string>
+    <string name="game_summary">GAME SUMMARY</string>
+    <string name="play_again">play again</string>
+    <string name="main_menu">Main menu</string>
+    <string name="final_distance">1234 miles</string>
+    <string name="final_score">25000 points</string>
+    <string name="total_max_score">25000 points</string>
+    <string name="guess_the_location_button">Guess</string>
+</resources>
