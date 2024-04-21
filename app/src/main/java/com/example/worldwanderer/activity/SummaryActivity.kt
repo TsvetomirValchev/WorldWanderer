@@ -1,15 +1,15 @@
-package com.example.destinationdetective.activity
+package com.example.worldwanderer.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.destinationdetective.view.GameSummaryView
-import com.example.destinationdetective.GoogleMapClass
-import com.example.destinationdetective.R
-import com.example.destinationdetective.databinding.ActivitySummaryBinding
-import com.example.destinationdetective.domain.PlaceModel
+import com.example.worldwanderer.view.GameSummaryView
+import com.example.worldwanderer.GoogleMapClass
+import com.example.worldwanderer.R
+import com.example.worldwanderer.databinding.ActivitySummaryBinding
+import com.example.worldwanderer.domain.PlaceModel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment

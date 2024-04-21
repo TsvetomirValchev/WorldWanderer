@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Destination Detective</string>
+    <string name="app_name">World Wanderer</string>
     <string name="final_score_value">00000</string>
     <string name="guesses_done">1/5</string>
     <string name="current_round">Round 1</string>

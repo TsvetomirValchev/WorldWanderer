@@ -1,16 +1,16 @@
-package com.example.destinationdetective.activity
+package com.example.worldwanderer.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.destinationdetective.domain.GuessablePlaces
-import com.example.destinationdetective.GoogleMapClass
-import com.example.destinationdetective.R
-import com.example.destinationdetective.view.SlideAnimation
-import com.example.destinationdetective.databinding.ActivityGuessPlaceBinding
-import com.example.destinationdetective.domain.PlaceModel
+import com.example.worldwanderer.domain.GuessablePlaces
+import com.example.worldwanderer.GoogleMapClass
+import com.example.worldwanderer.R
+import com.example.worldwanderer.view.SlideAnimation
+import com.example.worldwanderer.databinding.ActivityGuessPlaceBinding
+import com.example.worldwanderer.domain.PlaceModel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.StreetViewPanorama
@@ -80,24 +80,21 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding?.btnNextRound?.setOnClickListener {
-            if (round<5)
+            if (round>=5)
             {
-                round++
-                binding?.tvRound?.text = "$round/5"
-                correctPlace = correctPlaceList.elementAt(round-1)
-                googleMapClass.setCorrectPlace(correctPlace)
-                streetView.setPosition(correctPlace)
-                SlideAnimation.slideUp(scoreBoard)
-                SlideAnimation.slideDown(mapView)
-                mGoogleMap?.clear()
-                binding?.guessButton?.visibility = View.VISIBLE
-                onMapClick()
-                googleMapClass.zoomOnMap(LatLng(0.0,0.0),1f)
-
+                endGame()
             }
-
-            endGame()
-
+            round++
+            binding?.tvRound?.text = "$round/5"
+            correctPlace = correctPlaceList.elementAt(round-1)
+            googleMapClass.setCorrectPlace(correctPlace)
+            streetView.setPosition(correctPlace)
+            SlideAnimation.slideUp(scoreBoard)
+            SlideAnimation.slideDown(mapView)
+            mGoogleMap?.clear()
+            binding?.guessButton?.visibility = View.VISIBLE
+            onMapClick()
+            googleMapClass.zoomOnMap(LatLng(0.0,0.0),1f)
         }
 
         binding?.fbHintButton?.setOnClickListener {

@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DestinationDetective"
+        android:theme="@style/Theme.WorldWanderer"
         tools:targetApi="31">
         <activity
             android:name=".activity.SummaryActivity"
@@ -27,6 +27,11 @@
             android:name=".activity.GuessPlaceActivity"
             android:exported="false"
             android:process=":MapView1"
+            android:screenOrientation="fullSensor"
+            tools:ignore="DiscouragedApi" />
+        <activity
+            android:name=".activity.GuessCountryActivity"
+            android:exported="false"
             android:screenOrientation="fullSensor"
             tools:ignore="DiscouragedApi" />
         <activity

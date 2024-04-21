@@ -1,4 +1,4 @@
-package com.example.destinationdetective.domain
+package com.example.worldwanderer.domain
 
 import android.os.Parcel
 import android.os.Parcelable

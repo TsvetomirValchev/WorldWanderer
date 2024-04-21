@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.destinationdetective"
+    namespace = "com.example.worldwanderer"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.destinationdetective"
+        applicationId = "com.example.worldwanderer"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
