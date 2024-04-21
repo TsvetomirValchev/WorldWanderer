@@ -17,4 +17,12 @@
     <string name="final_score">25000 points</string>
     <string name="total_max_score">25000 points</string>
     <string name="guess_the_location_button">Guess</string>
+    <string name="app_title">World Wanderer</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="guess_the_country">Guess The Country</string>
+    <string name="register_input_hint_3">Password</string>
+    <string name="register_input_hint_2">Username</string>
+    <string name="register_input_hint_1">Email</string>
+    <string name="register_input_hint_4">Confirm Password</string>
+    <string name="register_button_text">Register</string>
 </resources>
