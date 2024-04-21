@@ -14,3 +14,4 @@
 .cxx
 local.properties
 res/values/google_map_api_key.xml
+/app/src/main/res/values/google_map_api_key.xml

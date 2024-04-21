@@ -47,18 +47,16 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
 
     private fun reverseGeocode(location: LatLng): String? {
         val geocoder = Geocoder(this, Locale.getDefault())
+        var countryName = "Unknown Country";
         try {
             val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-            if (addresses != null && addresses.isNotEmpty()) {
-                val countryName = addresses[0].countryName
-                return countryName;
+            if (!addresses.isNullOrEmpty()) {
+                countryName = addresses[0].countryName
             }
-
         } catch (e: IOException) {
-            e.printStackTrace()
             Toast.makeText(this, "Reverse geocoding failed", Toast.LENGTH_SHORT).show()
         }
-        return null;
+        return countryName;
     }
 
 
