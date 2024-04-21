@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
             startActivity((Intent(this, GuessCountryActivity::class.java)))
         }
 
-        binding?.playWithFriendBtn?.setOnClickListener {
+        binding?.leaderboardsBtn?.setOnClickListener {
             Toast.makeText(this, "This feature will be added in next update",
                 Toast.LENGTH_SHORT).show()
         }
