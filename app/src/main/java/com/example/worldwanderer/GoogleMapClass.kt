@@ -1,4 +1,4 @@
-package com.example.destinationdetective
+package com.example.worldwanderer
 
 import android.content.Context
 import android.location.Location

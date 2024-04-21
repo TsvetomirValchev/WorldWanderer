@@ -1,4 +1,4 @@
-package com.example.destinationdetective.view
+package com.example.worldwanderer.view
 
 import android.view.View
 

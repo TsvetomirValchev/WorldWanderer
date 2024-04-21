@@ -1,11 +1,12 @@
-package com.example.destinationdetective
+package com.example.worldwanderer
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.example.destinationdetective.activity.GuessPlaceActivity
-import com.example.destinationdetective.databinding.ActivityMainBinding
+import com.example.worldwanderer.activity.GuessCountryActivity
+import com.example.worldwanderer.activity.GuessPlaceActivity
+import com.example.worldwanderer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private var binding:ActivityMainBinding? = null
@@ -19,8 +20,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding?.guessTheCountryBtn?.setOnClickListener {
-            Toast.makeText(this, "This feature will be added in next update",
-                Toast.LENGTH_SHORT).show()
+            startActivity((Intent(this, GuessCountryActivity::class.java)))
         }
 
         binding?.playWithFriendBtn?.setOnClickListener {

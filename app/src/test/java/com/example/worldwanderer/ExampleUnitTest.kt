@@ -1,4 +1,4 @@
-package com.example.destinationdetective
+package com.example.worldwanderer
 
 import org.junit.Test
 

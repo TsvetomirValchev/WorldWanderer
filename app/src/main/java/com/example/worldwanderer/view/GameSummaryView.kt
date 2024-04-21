@@ -1,12 +1,12 @@
-package com.example.destinationdetective.view
+package com.example.worldwanderer.view
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.destinationdetective.R
-import com.example.destinationdetective.domain.PlaceModel
+import com.example.worldwanderer.R
+import com.example.worldwanderer.domain.PlaceModel
 
 class GameSummaryView(private val dataList:ArrayList<PlaceModel>):
     RecyclerView.Adapter<GameSummaryView.ViewHolder>()
