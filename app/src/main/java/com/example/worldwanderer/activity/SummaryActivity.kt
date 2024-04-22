@@ -26,7 +26,7 @@ class SummaryActivity : AppCompatActivity(), OnMapReadyCallback {
         placesList = intent.getParcelableArrayListExtra("dataList")!!
         setAdapter(placesList)
         binding?.tvFinalScore?.text = "$totalScore points"
-        binding?.tvFinalDistance?.text = "${getFinalScore(placesList)} miles"
+        binding?.tvFinalDistance?.text = "${getFinalScore(placesList)} kilometers"
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.summary_map_fragment)
                 as SupportMapFragment
