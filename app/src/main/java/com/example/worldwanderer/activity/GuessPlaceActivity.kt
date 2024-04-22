@@ -1,12 +1,14 @@
 package com.example.worldwanderer.activity
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.example.worldwanderer.domain.GuessablePlaces
 import com.example.worldwanderer.GoogleMapClass
 import com.example.worldwanderer.R
@@ -82,8 +84,20 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
             fbOpenMap.setOnClickListener { SlideAnimation.slideUp(mapView) }
             closeMapButton.setOnClickListener { SlideAnimation.slideDown(mapView) }
             guessButton.setOnClickListener { handleGuessButtonClicked() }
+            guessButton.backgroundTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                resources, R.color.purple, null
+            ))
             btnNextRound.setOnClickListener { handleNextRoundButtonClicked() }
+            if (round == 1)
+            {
+                binding.fbHintButton.visibility = View.GONE
+            }
             fbHintButton.setOnClickListener { handleHintButtonClicked() }
+            fbHintButton.backgroundTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources, R.color.yellow, null
+                ))
         }
     }
 
@@ -131,6 +145,10 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun handleNextRoundButtonClicked() {
 
+        if (round >= 1)
+        {
+            binding.fbHintButton.visibility = View.VISIBLE
+        }
         round++
         if (round > correctPlaceList.size) {
             Toast.makeText(this, "You have guessed every location", Toast.LENGTH_SHORT).show()

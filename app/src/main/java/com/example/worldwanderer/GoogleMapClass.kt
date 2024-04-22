@@ -76,8 +76,8 @@ class GoogleMapClass(private val mGoogleMap: GoogleMap?, private val context:Con
     {
         val mLat = correctPlace.latitude
         val mLong = correctPlace.longitude
-        val position = LatLng(mLat+ Random.nextDouble(0.01,0.1),
-            mLong+ Random.nextDouble(0.01,0.1)
+        val position = LatLng(mLat + Random.nextDouble(0.01,0.1),
+            mLong + Random.nextDouble(0.01,0.1)
             )
         mGoogleMap?.addCircle(CircleOptions()
             .center(position)

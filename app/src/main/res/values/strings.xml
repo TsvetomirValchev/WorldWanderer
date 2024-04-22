@@ -31,4 +31,7 @@
     <string name="login">Login</string>
     <string name="guess_the_place">Guess The Place</string>
     <string name="logout">Logout</string>
+    <string name="guess_country">Guess Country</string>
+    <string name="enter_the_country_name">Enter the country name</string>
+    <string name="round_number_lives_number">Round 1 / Lives: 3</string>
 </resources>
