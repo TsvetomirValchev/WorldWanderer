@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Round 1 / Lives: 3"
+        android:text="@string/round_number_lives_number"
         android:textSize="18sp" />
 
     <EditText
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/round_text_view"
         android:layout_margin="16dp"
-        android:hint="Enter the country name"
+        android:hint="@string/enter_the_country_name"
         android:inputType="text"
         android:imeOptions="actionDone"/>
 
@@ -35,6 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Guess Country" />
+        android:text="@string/guess_country" />
 
 </RelativeLayout>
