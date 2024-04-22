@@ -1,4 +1,5 @@
 package com.example.worldwanderer.activity
+
 import android.location.Geocoder
 import android.os.Bundle
 import android.widget.Button
@@ -43,6 +44,7 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
         this.streetViewPanorama = streetViewPanorama
         nextRound()
     }
+
     private fun nextRound() {
         roundTextView.text = "Round $round / Lives: $lives"
         guessEditText.setText("")
@@ -68,9 +70,10 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
 
 
     private fun getRandomLocation(): LatLng {
-        val placeList = GuessablePlaces.getFamousPlaceList().filter { !visitedLocations.contains(it) }
+        val placeList =
+            GuessablePlaces.getFamousPlaceList().filter { !visitedLocations.contains(it) }
         if (placeList.isEmpty()) {
-            Toast.makeText(this,"You have guessed every location", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "You have guessed every location", Toast.LENGTH_SHORT).show()
             finish()
         }
         val randomLocation = placeList.random()
@@ -98,7 +101,11 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
         if (lives <= 0) {
             handleGameOver()
         } else {
-            Toast.makeText(this, "Wrong guess. Country was $correctCountry. $lives lives remaining.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Wrong guess. Country was $correctCountry. $lives lives remaining.",
+                Toast.LENGTH_SHORT
+            ).show()
             nextRound()
         }
     }

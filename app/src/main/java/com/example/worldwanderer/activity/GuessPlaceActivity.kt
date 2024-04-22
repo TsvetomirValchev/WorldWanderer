@@ -72,7 +72,8 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
             streetView = it
         }
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map_Fragment) as SupportMapFragment?
+        val mapFragment =
+            supportFragmentManager.findFragmentById(R.id.map_Fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
     }
 
@@ -118,7 +119,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun updateHealth(selectedLocation: LatLng) {
         val distance = googleMapClass.getDistance()
-        health -= distance
+        health -= (distance * 2)
         healthProgressBar.progress = health
         healthTextView.text = "Health: $health"
         if (health <= 0) {
@@ -127,11 +128,12 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
     }
+
     private fun handleNextRoundButtonClicked() {
 
         round++
-        if(round >correctPlaceList.size){
-            Toast.makeText(this,"You have guessed every location", Toast.LENGTH_SHORT).show()
+        if (round > correctPlaceList.size) {
+            Toast.makeText(this, "You have guessed every location", Toast.LENGTH_SHORT).show()
             endGame()
         }
         binding.tvRound.text = "$round"
