@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "788745633146",
+    "project_id": "world-wanderer-e19f2",
+    "storage_bucket": "world-wanderer-e19f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788745633146:android:1e425b9a222668cf796ac3",
+        "android_client_info": {
+          "package_name": "com.example.worldwanderer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCacWypKUSbBVrpsGia0Txz8310w_5BUJQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

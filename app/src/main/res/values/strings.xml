@@ -25,4 +25,10 @@
     <string name="register_input_hint_1">Email</string>
     <string name="register_input_hint_4">Confirm Password</string>
     <string name="register_button_text">Register</string>
+    <string name="click_to_login">Click to login</string>
+    <string name="click_here_to_register">Click to register</string>
+    <string name="username_or_email_hint">Username or Email</string>
+    <string name="login">Login</string>
+    <string name="guess_the_place">Guess The Place</string>
+    <string name="logout">Logout</string>
 </resources>

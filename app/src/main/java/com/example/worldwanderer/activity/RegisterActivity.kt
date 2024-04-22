@@ -1,43 +1,173 @@
 package com.example.worldwanderer.activity
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Patterns
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.View.OnFocusChangeListener
-import android.view.View.OnKeyListener
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import com.example.worldwanderer.MainActivity
 import com.example.worldwanderer.R
 import com.example.worldwanderer.databinding.ActivityRegisterBinding
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 
-class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeListener, OnKeyListener {
+class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeListener {
 
     private lateinit var binding: ActivityRegisterBinding
+    private lateinit var auth: FirebaseAuth
+    private lateinit var clickToLogin: TextView
+
+
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser != null){
+            val changeToApp = Intent(applicationContext, MainActivity::class.java)
+            startActivity(changeToApp)
+            finish()
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        binding.usernameEt.onFocusChangeListener = this
+        auth = FirebaseAuth.getInstance()
+        clickToLogin = findViewById(R.id.click_to_login)
+        binding.registerBtn.setOnClickListener(this)
+        binding.clickToLogin.setOnClickListener(this)
         binding.emailEt.onFocusChangeListener = this
         binding.passwordEt.onFocusChangeListener = this
         binding.confirmPasswordEt.onFocusChangeListener = this
     }
 
-    private fun validateEmail(): Boolean{
+    override fun onClick(view: View?) {
+
+        val email: String = binding.emailEt.text.toString()
+        val password: String = binding.passwordEt.text.toString();
+
+        when (view!!.id) {
+            R.id.registerBtn -> {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (isValidRegistration() && task.isSuccessful) {
+                            Toast.makeText(
+                                baseContext,
+                                "Account created.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                            val changeToLogin = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(changeToLogin)
+                            finish()
+                        } else {
+
+                            Toast.makeText(
+                                baseContext,
+                                "Authentication failed.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+            }
+
+            R.id.click_to_login -> {
+                val changeToLogin = Intent(applicationContext, LoginActivity::class.java)
+                startActivity(changeToLogin)
+                finish()
+            }
+        }
+    }
+
+    override fun onFocusChange(view: View?, hasFocus: Boolean) {
+        if (view != null) {
+            when (view.id) {
+                R.id.emailEt -> {
+
+                    if (hasFocus) {
+                        binding.emailTil.isErrorEnabled = false
+                    }
+
+                    if (validateEmail()) {
+                        binding.emailTil.apply {
+                            setStartIconDrawable(R.drawable.baseline_check_box_24)
+                            setStartIconTintList(
+                                ColorStateList.valueOf(
+                                    ResourcesCompat.getColor(
+                                        resources, R.color.dark_green, null
+                                    )
+                                )
+                            )
+                        }
+                    }
+
+                }
+
+                R.id.passwordEt -> {
+
+                    if (hasFocus) {
+                        binding.passwordTil.isErrorEnabled = false
+                    }
+
+                    if (validatePassword() && binding.confirmPasswordEt.text!!.isEmpty() && validatePasswordMatching()) {
+                        binding.passwordTil.apply {
+                            setStartIconDrawable(R.drawable.baseline_check_box_24)
+                            setStartIconTintList(
+                                ColorStateList.valueOf(
+                                    ResourcesCompat.getColor(
+                                        resources, R.color.dark_green, null
+                                    )
+                                )
+                            )
+                        }
+                    }
+
+                }
+
+                R.id.confirmPasswordEt -> {
+
+                    if (hasFocus) {
+                        binding.confirmPasswordTil.isErrorEnabled = false
+                    }
+
+                    if (validatePasswordMatching() && binding.passwordEt.text.toString()
+                            .isNotEmpty()
+                    ) {
+                        binding.confirmPasswordTil.apply {
+                            setStartIconDrawable(R.drawable.baseline_check_box_24)
+                            setStartIconTintList(
+                                ColorStateList.valueOf(
+                                    ResourcesCompat.getColor(
+                                        resources, R.color.dark_green, null
+                                    )
+                                )
+                            )
+                        }
+                    }
+
+
+                }
+            }
+        }
+    }
+
+
+    private fun validateEmail(): Boolean {
         var errorMessage: String? = ""
         val emailInput: String = binding.emailEt.text.toString()
 
-        if(emailInput.isEmpty()){
+        if (emailInput.isEmpty()) {
             errorMessage = "Email is required!"
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
             errorMessage = "Invalid email address! "
         }
 
@@ -46,28 +176,15 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
         return errorMessage == ""
     }
 
-    private fun validateUsername(): Boolean{
-        var errorMessage: String? = ""
-        val usernameInput: String = binding.usernameEt.text.toString()
-
-        if(usernameInput.isEmpty()){
-            errorMessage = "Username is required!"
-        }
-
-        printErrorIfPresent(errorMessage, binding.usernameTil)
-
-        return errorMessage == ""
-    }
-
-    private fun validatePassword(): Boolean{
+    private fun validatePassword(): Boolean {
         var errorMessage: String? = ""
         val passwordInput: String = binding.passwordEt.text.toString()
 
-        if(passwordInput.isEmpty()){
+        if (passwordInput.isEmpty()) {
             errorMessage = "Password is required!"
         }
 
-        if (passwordInput.length < 6){
+        if (passwordInput.length < 6) {
             errorMessage = "Password needs to be at least 6 characters long!"
         }
 
@@ -76,12 +193,12 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
         return errorMessage == ""
     }
 
-    private fun validatePasswordMatching(): Boolean{
+    private fun validatePasswordMatching(): Boolean {
         var errorMessage: String? = ""
         val passwordInput: String = binding.passwordEt.text.toString()
         val confirmPasswordInput: String = binding.confirmPasswordEt.text.toString()
 
-        if(passwordInput != confirmPasswordInput){
+        if (passwordInput != confirmPasswordInput) {
             errorMessage = "The passwords does not match!"
         }
 
@@ -99,90 +216,13 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
         }
     }
 
+    private fun isValidRegistration(): Boolean {
+        var isValid = true
 
-    override fun onClick(view: View?) {
+        if (!validateEmail()) isValid = false
+        if (!validatePassword()) isValid = false
+        if (!validatePasswordMatching()) isValid = false
 
-    }
-
-    override fun onFocusChange(view: View?, hasFocus: Boolean) {
-        if(view != null){
-            when(view.id){
-                R.id.emailEt -> {
-
-                    if (hasFocus) {
-                        if(binding.emailTil.isErrorEnabled){
-                            binding.emailTil.isErrorEnabled = false
-                        }
-                    }
-
-                    if(validateEmail()){
-                        binding.emailTil.apply {
-                            setStartIconDrawable(R.drawable.baseline_check_box_24)
-                            setStartIconTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                                resources, R.color.dark_green, null)))
-                        }
-                    }
-
-                }
-
-                R.id.usernameEt -> {
-
-                    if (hasFocus) {
-                        if(binding.usernameTil.isErrorEnabled){
-                            binding.usernameTil.isErrorEnabled = false
-                        }
-                    }
-
-                    if(validateUsername()){
-                        binding.usernameTil.apply {
-                            setStartIconDrawable(R.drawable.baseline_check_box_24)
-                            setStartIconTintList(ColorStateList.valueOf(ResourcesCompat.getColor(resources, R.color.dark_green, null)))
-                        }
-                    }
-
-                }
-
-                R.id.passwordEt -> {
-
-                    if (hasFocus) {
-                        if(binding.passwordTil.isErrorEnabled){
-                            binding.passwordTil.isErrorEnabled = false
-                        }
-                    }
-
-                    if(validatePassword() && binding.confirmPasswordEt.text!!.isEmpty() && validatePasswordMatching()){
-                        binding.passwordTil.apply {
-                            setStartIconDrawable(R.drawable.baseline_check_box_24)
-                            setStartIconTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                                resources, R.color.dark_green, null)))
-                        }
-                    }
-
-                }
-
-                R.id.confirmPasswordEt -> {
-
-                    if(hasFocus) {
-                        if(binding.confirmPasswordTil.isErrorEnabled){
-                            binding.confirmPasswordTil.isErrorEnabled = false
-                        }
-                    }
-
-                    if(validatePasswordMatching() && binding.passwordEt.text.toString().isNotEmpty()){
-                        binding.confirmPasswordTil.apply {
-                            setStartIconDrawable(R.drawable.baseline_check_box_24)
-                            setStartIconTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                                resources, R.color.dark_green, null)))
-                        }
-                    }
-
-
-                }
-            }
-        }
-    }
-
-    override fun onKey(view: View?, event: Int, keyevent: KeyEvent?): Boolean {
-        return false
+        return isValid
     }
 }
