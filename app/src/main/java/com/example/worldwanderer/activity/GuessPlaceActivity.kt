@@ -130,6 +130,10 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun handleNextRoundButtonClicked() {
 
         round++
+        if(round >correctPlaceList.size){
+            Toast.makeText(this,"You have guessed every location", Toast.LENGTH_SHORT).show()
+            endGame()
+        }
         binding.tvRound.text = "$round"
         correctPlace = correctPlaceList.elementAt(round - 1)
         googleMapClass.setCorrectPlace(correctPlace)

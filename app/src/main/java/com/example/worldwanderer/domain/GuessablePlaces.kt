@@ -39,7 +39,7 @@ object GuessablePlaces {
     fun getFamousPlaceList():Set<LatLng>
     {
         val list = mutableSetOf<LatLng>()
-        while (list.size<5)
+        while (list.size< famousPlaceList.size)
         {
             list.add(famousPlaceList.random())
         }
