@@ -43,7 +43,7 @@ class GoogleMapClass(private val mGoogleMap: GoogleMap?, private val context:Con
             correctPlace.longitude,
             result
         )
-        return (result[0]/1609.34).roundToInt()
+        return (result[0]/1000).roundToInt()
     }
 
     private var placeMarker:Marker? = null

@@ -97,7 +97,7 @@
             android:id="@+id/tv_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/miles_away_from_answer"
+            android:text="@string/kilometers_away_from_answer"
             android:textColor="@color/white"
             android:textSize="22sp" />
 

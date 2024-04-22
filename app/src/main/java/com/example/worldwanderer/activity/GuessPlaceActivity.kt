@@ -157,7 +157,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
         with(binding) {
             tvScoreRound.text = "Round $round"
             tvScore.text = "You got ${getScore()} points"
-            tvDistance.text = "You are ${googleMapClass.getDistance()} miles away"
+            tvDistance.text = "You are ${googleMapClass.getDistance()} kilometers away"
             pbScore.progress = getScore()
         }
         SlideAnimation.slideDown(scoreBoard)
