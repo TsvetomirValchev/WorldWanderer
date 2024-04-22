@@ -22,12 +22,12 @@
             android:orientation="vertical" >
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emailTil"
+                android:id="@+id/usernameOrEmailTil"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/emailEt"
+                    android:id="@+id/usernameOrEmailEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="8dp"
@@ -56,44 +56,26 @@
                     android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/confirmPasswordTil"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:passwordToggleEnabled="true"
-                app:counterEnabled="true"
-                app:counterMaxLength="20">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/confirmPasswordEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="12dp"
-                    android:hint="@string/register_input_hint_4"
-                    android:maxLength="20"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/registerBtn"
+                android:id="@+id/loginBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:text="@string/register_button_text"
+                android:text="@string/login"
                 android:layout_marginTop="8dp"
                 style="@style/Widget.MaterialComponents.Button"/>
 
-
             <TextView
-                android:id="@+id/click_to_login"
+                android:id="@+id/click_to_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="@string/click_to_login"/>
+                android:text="@string/click_here_to_register"/>
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
