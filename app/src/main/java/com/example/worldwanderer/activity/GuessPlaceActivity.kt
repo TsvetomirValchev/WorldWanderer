@@ -89,10 +89,6 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
                 resources, R.color.purple, null
             ))
             btnNextRound.setOnClickListener { handleNextRoundButtonClicked() }
-            if (round == 1)
-            {
-                binding.fbHintButton.visibility = View.GONE
-            }
             fbHintButton.setOnClickListener { handleHintButtonClicked() }
             fbHintButton.backgroundTintList = ColorStateList.valueOf(
                 ResourcesCompat.getColor(
@@ -123,7 +119,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
             googleMapClass.addPolyline(correctPlace, it)
             googleMapClass.zoomOnMap()
             mGoogleMap?.setOnMapClickListener(null)
-            updateHealth(it)
+            updateHealth()
             setTotalScore()
             showScoreBoard()
             setPlaceModel()
@@ -131,7 +127,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun updateHealth(selectedLocation: LatLng) {
+    private fun updateHealth() {
         val distance = googleMapClass.getDistance()
         health -= (distance * 2)
         healthProgressBar.progress = health
@@ -145,7 +141,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun handleNextRoundButtonClicked() {
 
-        if (round >= 1)
+        if (round == 1)
         {
             binding.fbHintButton.visibility = View.VISIBLE
         }
