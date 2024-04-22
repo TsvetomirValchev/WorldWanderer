@@ -10,41 +10,39 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        app:cardBackgroundColor="#3E1B80"
         android:padding="5dp"
+        app:cardBackgroundColor="#3E1B80"
         app:cardCornerRadius="30dp"
         app:cardElevation="7dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/tv_round"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/guesses_done"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
                 android:gravity="center"
-                />
+                android:text="@string/guesses_done"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_finalScore"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="@string/final_score_value"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
                 android:gravity="center"
-                />
+                android:text="@string/final_score_value"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -53,18 +51,18 @@
         android:id="@+id/ll_ScoreBoard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:elevation="4dp"
         android:background="@drawable/black_gradient_bg"
-        app:layout_constraintBottom_toTopOf="parent"
-        >
+        android:elevation="4dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="parent">
+
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/baseline_location_on_24"
-            android:contentDescription="@string/pin" />
+            android:contentDescription="@string/pin"
+            android:src="@drawable/baseline_location_on_24" />
 
         <TextView
             android:id="@+id/tv_score_round"
@@ -72,8 +70,7 @@
             android:layout_height="wrap_content"
             android:text="@string/current_round"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_score"
@@ -83,28 +80,26 @@
             android:text="@string/your_points_for_this_guess"
             android:textColor="@color/yellow"
             android:textSize="22sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <ProgressBar
             android:id="@+id/pb_score"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:progressTint="@color/yellow"
-            android:progressBackgroundTint="@color/white"
+            android:layout_margin="10dp"
             android:max="5000"
             android:progress="4501"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_margin="10dp"
-            />
+            android:progressBackgroundTint="@color/white"
+            android:progressTint="@color/yellow" />
+
         <TextView
             android:id="@+id/tv_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/miles_away_from_answer"
             android:textColor="@color/white"
-            android:textSize="22sp"
-            />
+            android:textSize="22sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_next_round"
@@ -114,30 +109,28 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_bg"
             android:text="@string/next_round"
-            android:textSize="22sp"
             android:textColor="@color/white"
-            />
+            android:textSize="22sp" />
     </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_StreetView"
+        class="com.google.android.gms.maps.SupportStreetViewPanoramaFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class = "com.google.android.gms.maps.SupportStreetViewPanoramaFragment"
-        />
+        android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fb_openMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:contentDescription="@string/floating_button"
         android:src="@drawable/baseline_map_24"
         app:backgroundTint="@color/black"
-        app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/floating_button" />
+        app:tint="@color/white" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_mapView"
@@ -146,52 +139,93 @@
         android:elevation="7dp"
         app:layout_constraintTop_toBottomOf="parent">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/map_Fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class="com.google.android.gms.maps.SupportMapFragment"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/map_Fragment"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/closeMapButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/close_button"
-            android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="20dp"
             android:background="@null"
-            android:contentDescription="@string/image_button" />
+            android:contentDescription="@string/image_button"
+            android:scaleType="fitXY"
+            android:src="@drawable/close_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/guess_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:contentDescription="@string/floating_button"
             android:src="@drawable/guess_button"
             android:text="@string/guess_the_location_button"
-            app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="@string/floating_button" />
+            app:tint="@color/white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fb_hintButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="200dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginBottom="200dp"
+            android:contentDescription="@string/floating_button"
             android:src="@drawable/baseline_tips_and_updates_24"
             app:backgroundTint="@color/black"
-            app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/floating_button" />
+            app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/black"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="2dp"
+        app:layout_constraintTop_toTopOf="@+id/fragment_StreetView"
+        tools:layout_editor_absoluteX="10dp">
+
+        <ProgressBar
+            android:id="@+id/pb_health"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:layout_marginTop="10dp"
+            android:indeterminate="false"
+            android:max="5000"
+            android:progress="5000"
+            android:progressDrawable="@drawable/health_progress_layer_drawable"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="0dp"
+            android:layout_margin="2dp" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tv_health"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/health_text_background"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="Health: 5000"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

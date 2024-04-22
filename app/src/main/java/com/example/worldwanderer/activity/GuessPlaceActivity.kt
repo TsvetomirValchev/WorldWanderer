@@ -3,6 +3,9 @@ package com.example.worldwanderer.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.worldwanderer.domain.GuessablePlaces
 import com.example.worldwanderer.GoogleMapClass
@@ -26,13 +29,14 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     private var mGoogleMap: GoogleMap? = null
     private lateinit var googleMapClass: GoogleMapClass
     private var round = 1
-
+    private var health: Int = 5000
     private lateinit var correctPlace: LatLng
     private var selectedPlace: LatLng? = null
     private lateinit var correctPlaceList: List<LatLng>
     private var totalScore = 0
     private val placeModelList = ArrayList<PlaceModel>()
-
+    private lateinit var healthProgressBar: ProgressBar
+    private lateinit var healthTextView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGuessPlaceBinding.inflate(layoutInflater)
@@ -41,6 +45,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
         initializeViews()
         initializeMap()
         initializeListeners()
+        initializeHealth()
     }
 
     private fun initializeViews() {
@@ -48,6 +53,14 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
         scoreBoard = binding.llScoreBoard
         correctPlaceList = GuessablePlaces.getFamousPlaceList().toList()
         correctPlace = correctPlaceList.first()
+    }
+
+    private fun initializeHealth() {
+        healthProgressBar = findViewById(R.id.pb_health)
+        healthProgressBar.max = 5000
+        healthProgressBar.progress = health
+        healthTextView = findViewById(R.id.tv_health)
+        healthTextView.text = "Health: $health"
     }
 
     private fun initializeMap() {
@@ -95,22 +108,29 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
             googleMapClass.addPolyline(correctPlace, it)
             googleMapClass.zoomOnMap()
             mGoogleMap?.setOnMapClickListener(null)
+            updateHealth(it)
             setTotalScore()
             showScoreBoard()
             setPlaceModel()
             selectedPlace = null
         }
-        if (round == 5) {
-            binding.btnNextRound.text = "View Summary"
-        }
     }
 
-    private fun handleNextRoundButtonClicked() {
-        if (round >= 5) {
+    private fun updateHealth(selectedLocation: LatLng) {
+        val distance = googleMapClass.getDistance()
+        health -= distance
+        healthProgressBar.progress = health
+        healthTextView.text = "Health: $health"
+        if (health <= 0) {
+            Toast.makeText(this, "You have ran out of health", Toast.LENGTH_SHORT).show()
             endGame()
         }
+
+    }
+    private fun handleNextRoundButtonClicked() {
+
         round++
-        binding.tvRound.text = "$round/5"
+        binding.tvRound.text = "$round"
         correctPlace = correctPlaceList.elementAt(round - 1)
         googleMapClass.setCorrectPlace(correctPlace)
         streetView.setPosition(correctPlace)
