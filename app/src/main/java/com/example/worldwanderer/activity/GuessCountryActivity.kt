@@ -1,5 +1,6 @@
 package com.example.worldwanderer.activity
 
+import android.content.Intent
 import android.location.Geocoder
 import android.os.Bundle
 import android.widget.Button
@@ -7,6 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.worldwanderer.MainActivity
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.example.worldwanderer.domain.GuessablePlaces
@@ -74,6 +76,8 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
             GuessablePlaces.getFamousPlaceList().filter { !visitedLocations.contains(it) }
         if (placeList.isEmpty()) {
             Toast.makeText(this, "You have guessed every location", Toast.LENGTH_SHORT).show()
+            val changeToMainMenu = Intent(applicationContext, MainActivity::class.java)
+            startActivity(changeToMainMenu)
             finish()
         }
         val randomLocation = placeList.random()
