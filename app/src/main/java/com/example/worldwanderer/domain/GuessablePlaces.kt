@@ -29,8 +29,7 @@ object GuessablePlaces {
         LatLng(-13.163141, -72.544963),    // Machu Picchu, Peru
         LatLng(41.890251, 12.492373),      // Roman Forum, Rome, Italy
         LatLng(40.758896, -73.985130),     // Times Square, New York, USA
-        LatLng(51.481583, -0.008726),      // The O2 Arena, London, UK
-        LatLng(36.102988, -115.174470),    // Las Vegas Strip, Las Vegas, USA
+        LatLng(36.1010805,-115.15806),    // Las Vegas Strip, Las Vegas, USA
         LatLng(35.689487, 139.691711),     // Tokyo Tower, Tokyo, Japan
         LatLng(40.416775, -3.703790),      // Plaza Mayor, Madrid, Spain
         LatLng(-25.670997, 28.523736),     // Union Buildings, Pretoria, South Africa
@@ -40,7 +39,7 @@ object GuessablePlaces {
     fun getFamousPlaceList():Set<LatLng>
     {
         val list = mutableSetOf<LatLng>()
-        while (list.size<5)
+        while (list.size< famousPlaceList.size)
         {
             list.add(famousPlaceList.random())
         }

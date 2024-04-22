@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">World Wanderer</string>
     <string name="final_score_value">00000</string>
-    <string name="guesses_done">1/5</string>
+    <string name="guesses_done">1</string>
     <string name="current_round">Round 1</string>
     <string name="your_points_for_this_guess">You got 4501 points</string>
     <string name="miles_away_from_answer">You are 97 miles away</string>

@@ -15,14 +15,14 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 
 class SummaryActivity : AppCompatActivity(), OnMapReadyCallback {
-    private var binding:ActivitySummaryBinding? = null
-    private lateinit var placesList:ArrayList<PlaceModel>
+    private var binding: ActivitySummaryBinding? = null
+    private lateinit var placesList: ArrayList<PlaceModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySummaryBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
-        val totalScore:Int = intent.getIntExtra("totalScore",0)
+        val totalScore: Int = intent.getIntExtra("totalScore", 0)
         placesList = intent.getParcelableArrayListExtra("dataList")!!
         setAdapter(placesList)
         binding?.tvFinalScore?.text = "$totalScore points"
@@ -42,9 +42,8 @@ class SummaryActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun setAdapter(dataList:ArrayList<PlaceModel>)
-    {
-        val recyclerView:RecyclerView = findViewById(R.id.rv_game_summary)
+    private fun setAdapter(dataList: ArrayList<PlaceModel>) {
+        val recyclerView: RecyclerView = findViewById(R.id.rv_game_summary)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val adapter = GameSummaryView(dataList)
@@ -55,21 +54,18 @@ class SummaryActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val googleMapClass = GoogleMapClass(googleMap, this)
 
-        for (place in placesList)
-        {
+        for (place in placesList) {
             googleMapClass.addBlueMarker(place.correctPlace!!)
             googleMapClass.addRedMarker(place.guessedPlace!!)
-            googleMapClass.addPolyline(place.correctPlace,place.guessedPlace)
+            googleMapClass.addPolyline(place.correctPlace, place.guessedPlace)
         }
 
     }
 
-    private fun getFinalScore(placesList: ArrayList<PlaceModel>):Int
-    {
+    private fun getFinalScore(placesList: ArrayList<PlaceModel>): Int {
         var finalDistance = 0
-        for (place in placesList)
-        {
-            finalDistance+= place.distance
+        for (place in placesList) {
+            finalDistance += place.distance
         }
 
         return finalDistance

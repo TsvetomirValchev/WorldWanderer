@@ -1,8 +1,10 @@
 package com.example.worldwanderer.activity
+
 import android.location.Geocoder
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.*
@@ -10,7 +12,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.example.worldwanderer.domain.GuessablePlaces
 import java.io.IOException
 import java.util.Locale
-import kotlin.random.Random
 import com.example.worldwanderer.R
 
 class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallback {
@@ -18,13 +19,16 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
     private lateinit var randomLocation: LatLng
     private lateinit var correctCountry: String
     private lateinit var guessEditText: EditText
-    private lateinit var placeList:Set<LatLng>
-
+    private lateinit var roundTextView: TextView
+    private val visitedLocations = mutableSetOf<LatLng>()
+    private var round = 1
+    private var lives = 3
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_guess_country)
 
         guessEditText = findViewById(R.id.guess_edit_text)
+        roundTextView = findViewById(R.id.round_text_view)
 
         val guessButton: Button = findViewById(R.id.guess_button)
         guessButton.setOnClickListener {
@@ -38,16 +42,21 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
 
     override fun onStreetViewPanoramaReady(streetViewPanorama: StreetViewPanorama) {
         this.streetViewPanorama = streetViewPanorama
-
-        randomLocation = getRandomLocation()
-        streetViewPanorama.setPosition(randomLocation)
-
-        correctCountry = reverseGeocode(randomLocation)!!
+        nextRound()
     }
 
-    private fun reverseGeocode(location: LatLng): String? {
+    private fun nextRound() {
+        roundTextView.text = "Round $round / Lives: $lives"
+        guessEditText.setText("")
+        randomLocation = getRandomLocation()
+        streetViewPanorama.setPosition(randomLocation)
+        correctCountry = reverseGeocode(randomLocation)!!
+
+    }
+
+    private fun reverseGeocode(location: LatLng): String {
         val geocoder = Geocoder(this, Locale.getDefault())
-        var countryName = "Unknown Country";
+        var countryName = "Unknown Country"
         try {
             val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
             if (!addresses.isNullOrEmpty()) {
@@ -56,23 +65,53 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
         } catch (e: IOException) {
             Toast.makeText(this, "Reverse geocoding failed", Toast.LENGTH_SHORT).show()
         }
-        return countryName;
+        return countryName
     }
 
 
     private fun getRandomLocation(): LatLng {
-        placeList = GuessablePlaces.getFamousPlaceList()
-        val position = Random.nextInt(0, placeList.size)
-        return placeList.random()
+        val placeList =
+            GuessablePlaces.getFamousPlaceList().filter { !visitedLocations.contains(it) }
+        if (placeList.isEmpty()) {
+            Toast.makeText(this, "You have guessed every location", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+        val randomLocation = placeList.random()
+        visitedLocations.add(randomLocation)
+        return randomLocation
     }
 
     private fun guessCountry() {
-        // Check if the player's guess matches the correct country
         val userGuess = guessEditText.text.toString().trim()
         if (userGuess.equals(correctCountry, ignoreCase = true)) {
-            Toast.makeText(this, "Congratulations! You guessed it right!", Toast.LENGTH_SHORT).show()
+            handleCorrectGuess()
         } else {
-            Toast.makeText(this, "Sorry, wrong guess. The correct country is $correctCountry.", Toast.LENGTH_SHORT).show()
+            handleIncorrectGuess()
         }
+    }
+
+    private fun handleCorrectGuess() {
+        Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
+        round++
+        nextRound()
+    }
+
+    private fun handleIncorrectGuess() {
+        lives--
+        if (lives <= 0) {
+            handleGameOver()
+        } else {
+            Toast.makeText(
+                this,
+                "Wrong guess. Country was $correctCountry. $lives lives remaining.",
+                Toast.LENGTH_SHORT
+            ).show()
+            nextRound()
+        }
+    }
+
+    private fun handleGameOver() {
+        Toast.makeText(this, "Game over! You ran out of lives.", Toast.LENGTH_SHORT).show()
+        finish()
     }
 }

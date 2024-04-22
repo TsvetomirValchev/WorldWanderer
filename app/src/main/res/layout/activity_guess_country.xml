@@ -3,21 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="activity.GuessCountryActivity">
+    tools:context=".activity.GuessCountryActivity">
 
-    <fragment
-        android:id="@+id/streetviewpanorama"
-        android:name="com.google.android.gms.maps.SupportStreetViewPanoramaFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <TextView
+        android:id="@+id/round_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Round 1 / Lives: 3"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/guess_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/round_text_view"
         android:layout_margin="16dp"
         android:hint="Enter the country name"
-        android:inputType="text" />
+        android:inputType="text"
+        android:imeOptions="actionDone"/>
+
+    <fragment
+        android:id="@+id/streetviewpanorama"
+        android:name="com.google.android.gms.maps.SupportStreetViewPanoramaFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/guess_edit_text" />
 
     <Button
         android:id="@+id/guess_button"

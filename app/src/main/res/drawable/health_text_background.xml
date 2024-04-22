@@ -1,0 +1,5 @@
+<!-- health_text_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#3E1B80" />
+    <corners android:radius="25dp" />
+</shape>
