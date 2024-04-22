@@ -28,7 +28,7 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
-        if (currentUser != null){
+        if (currentUser != null) {
             val changeToApp = Intent(applicationContext, MainActivity::class.java)
             startActivity(changeToApp)
             finish()
@@ -64,7 +64,8 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
                                 "Account created.",
                                 Toast.LENGTH_SHORT,
                             ).show()
-                            val changeToLogin = Intent(applicationContext, LoginActivity::class.java)
+                            val changeToLogin =
+                                Intent(applicationContext, LoginActivity::class.java)
                             startActivity(changeToLogin)
                             finish()
                         } else {

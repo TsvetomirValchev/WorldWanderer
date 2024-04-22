@@ -13,7 +13,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
-    private var binding:ActivityMainBinding? = null
+    private var binding: ActivityMainBinding? = null
 
     private lateinit var auth: FirebaseAuth
 
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         val user = auth.currentUser
 
-        if(user == null){
+        if (user == null) {
             val changeToLogin = Intent(applicationContext, LoginActivity::class.java)
             startActivity(changeToLogin)
             finish()
@@ -39,8 +39,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding?.leaderboardsBtn?.setOnClickListener {
-            Toast.makeText(this, "This feature will be added in next update",
-                Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this, "This feature will be added in next update",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         binding?.logoutBtn?.setOnClickListener {

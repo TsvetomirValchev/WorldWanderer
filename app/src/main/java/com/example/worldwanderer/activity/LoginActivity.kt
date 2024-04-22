@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class LoginActivity : AppCompatActivity(), OnClickListener{
+class LoginActivity : AppCompatActivity(), OnClickListener {
 
 
     private lateinit var binding: ActivityLoginBinding
@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity(), OnClickListener{
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
-        if (currentUser != null){
+        if (currentUser != null) {
             val changeToApp = Intent(applicationContext, MainActivity::class.java)
             startActivity(changeToApp)
             finish()
@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity(), OnClickListener{
         when (view!!.id) {
             R.id.loginBtn -> {
 
-                if (TextUtils.isEmpty(emailOrUsernameInput.text.toString())){
+                if (TextUtils.isEmpty(emailOrUsernameInput.text.toString())) {
                     Toast.makeText(
                         baseContext,
                         "Email or username field cannot be empty",
@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity(), OnClickListener{
                     return
                 }
 
-                if (TextUtils.isEmpty(passwordInput.text.toString())){
+                if (TextUtils.isEmpty(passwordInput.text.toString())) {
                     Toast.makeText(
                         baseContext,
                         "Password cannot be empty",
@@ -71,7 +71,10 @@ class LoginActivity : AppCompatActivity(), OnClickListener{
                     return
                 }
 
-                auth.signInWithEmailAndPassword(emailOrUsernameInput.text.toString(), passwordInput.text.toString())
+                auth.signInWithEmailAndPassword(
+                    emailOrUsernameInput.text.toString(),
+                    passwordInput.text.toString()
+                )
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(
