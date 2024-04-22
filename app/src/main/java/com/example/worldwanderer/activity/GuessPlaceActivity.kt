@@ -1,6 +1,5 @@
 package com.example.worldwanderer.activity
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -20,140 +19,141 @@ import com.google.android.gms.maps.model.LatLng
 import kotlin.math.max
 
 class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
-    private var binding:ActivityGuessPlaceBinding? = null
+    private lateinit var binding: ActivityGuessPlaceBinding
     private lateinit var mapView: View
-    private lateinit var scoreBoard:View
+    private lateinit var scoreBoard: View
     private lateinit var streetView: StreetViewPanorama
-    private var mGoogleMap:GoogleMap? = null
+    private var mGoogleMap: GoogleMap? = null
     private lateinit var googleMapClass: GoogleMapClass
     private var round = 1
 
-    private lateinit var correctPlace :LatLng
-    private var selectedPlace:LatLng? = null
-    private lateinit var correctPlaceList:Set<LatLng>
+    private lateinit var correctPlace: LatLng
+    private var selectedPlace: LatLng? = null
+    private lateinit var correctPlaceList: List<LatLng>
+    private var totalScore = 0
+    private val placeModelList = ArrayList<PlaceModel>()
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGuessPlaceBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+        setContentView(binding.root)
 
-        mapView = findViewById(R.id.cl_mapView)
-        scoreBoard = findViewById(R.id.ll_ScoreBoard)
-        correctPlaceList = GuessablePlaces.getFamousPlaceList()
+        initializeViews()
+        initializeMap()
+        initializeListeners()
+    }
+
+    private fun initializeViews() {
+        mapView = binding.clMapView
+        scoreBoard = binding.llScoreBoard
+        correctPlaceList = GuessablePlaces.getFamousPlaceList().toList()
         correctPlace = correctPlaceList.first()
+    }
 
+    private fun initializeMap() {
         val streetViewPanoramaFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_StreetView)
                     as SupportStreetViewPanoramaFragment?
-        streetViewPanoramaFragment?.getStreetViewPanoramaAsync{
+        streetViewPanoramaFragment?.getStreetViewPanoramaAsync {
             it.setPosition(correctPlace)
             streetView = it
         }
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_Fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+    }
 
-        binding?.fbOpenMap?.setOnClickListener {
-            SlideAnimation.slideUp(mapView)
+    private fun initializeListeners() {
+        with(binding) {
+            fbOpenMap.setOnClickListener { SlideAnimation.slideUp(mapView) }
+            closeMapButton.setOnClickListener { SlideAnimation.slideDown(mapView) }
+            guessButton.setOnClickListener { handleGuessButtonClicked() }
+            btnNextRound.setOnClickListener { handleNextRoundButtonClicked() }
+            fbHintButton.setOnClickListener { handleHintButtonClicked() }
         }
-        binding?.closeMapButton?.setOnClickListener {
-            SlideAnimation.slideDown(mapView)
-        }
-
-        binding?.guessButton?.setOnClickListener {
-            if (selectedPlace!=null)
-            {
-                googleMapClass.addBlueMarker(correctPlace)
-                googleMapClass.addPolyline(correctPlace,selectedPlace!!)
-                googleMapClass.zoomOnMap()
-                mGoogleMap?.setOnMapClickListener(null)
-                setTotalScore()
-                showScoreBoard()
-                setPlaceModel()
-                selectedPlace = null
-            }
-            if (round==5)
-            {
-                binding?.btnNextRound?.text = "View Summary"
-            }
-        }
-
-        binding?.btnNextRound?.setOnClickListener {
-            if (round>=5)
-            {
-                endGame()
-            }
-            round++
-            binding?.tvRound?.text = "$round/5"
-            correctPlace = correctPlaceList.elementAt(round-1)
-            googleMapClass.setCorrectPlace(correctPlace)
-            streetView.setPosition(correctPlace)
-            SlideAnimation.slideUp(scoreBoard)
-            SlideAnimation.slideDown(mapView)
-            mGoogleMap?.clear()
-            binding?.guessButton?.visibility = View.VISIBLE
-            onMapClick()
-            googleMapClass.zoomOnMap(LatLng(0.0,0.0),1f)
-        }
-
-        binding?.fbHintButton?.setOnClickListener {
-            googleMapClass.addCircle()
-            binding?.fbHintButton?.visibility = View.GONE
-        }
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mGoogleMap = googleMap
-        googleMapClass = GoogleMapClass(googleMap,this@GuessPlaceActivity)
-        onMapClick()
+        googleMapClass = GoogleMapClass(googleMap, this@GuessPlaceActivity)
+        setMapClickListener()
     }
 
-    private fun onMapClick()
-    {
+    private fun setMapClickListener() {
         mGoogleMap?.setOnMapClickListener {
             selectedPlace = it
             googleMapClass.setSelectedPlace(it)
             googleMapClass.setCorrectPlace(correctPlace)
             googleMapClass.addSelectedPlaceMarker(it)
-            binding?.guessButton?.visibility = View.VISIBLE
+            binding.guessButton.visibility = View.VISIBLE
         }
     }
 
-    private fun showScoreBoard()
-    {
-        binding?.tvScoreRound?.text = "Round $round"
-        binding?.tvScore?.text = "You got ${getScore()} points"
-        binding?.tvDistance?.text = "You are ${googleMapClass.getDistance()} miles away"
-        binding?.pbScore?.progress = getScore()
+    private fun handleGuessButtonClicked() {
+        selectedPlace?.let {
+            googleMapClass.addBlueMarker(correctPlace)
+            googleMapClass.addPolyline(correctPlace, it)
+            googleMapClass.zoomOnMap()
+            mGoogleMap?.setOnMapClickListener(null)
+            setTotalScore()
+            showScoreBoard()
+            setPlaceModel()
+            selectedPlace = null
+        }
+        if (round == 5) {
+            binding.btnNextRound.text = "View Summary"
+        }
+    }
+
+    private fun handleNextRoundButtonClicked() {
+        if (round >= 5) {
+            endGame()
+        }
+        round++
+        binding.tvRound.text = "$round/5"
+        correctPlace = correctPlaceList.elementAt(round - 1)
+        googleMapClass.setCorrectPlace(correctPlace)
+        streetView.setPosition(correctPlace)
+        SlideAnimation.slideUp(scoreBoard)
+        SlideAnimation.slideDown(mapView)
+        mGoogleMap?.clear()
+        binding.guessButton.visibility = View.VISIBLE
+        setMapClickListener()
+        googleMapClass.zoomOnMap(LatLng(0.0, 0.0), 1f)
+    }
+
+    private fun handleHintButtonClicked() {
+        googleMapClass.addCircle()
+        binding.fbHintButton.visibility = View.GONE
+    }
+
+    private fun showScoreBoard() {
+        with(binding) {
+            tvScoreRound.text = "Round $round"
+            tvScore.text = "You got ${getScore()} points"
+            tvDistance.text = "You are ${googleMapClass.getDistance()} miles away"
+            pbScore.progress = getScore()
+        }
         SlideAnimation.slideDown(scoreBoard)
     }
 
-    private fun getScore():Int
-    {
+    private fun getScore(): Int {
         val distance = googleMapClass.getDistance()
-        return max(0, 5000-2*distance)
+        return max(0, 5000 - 2 * distance)
     }
 
-    private var totalScore = 0
-    private fun setTotalScore()
-    {
-        totalScore+= getScore()
-        binding?.tvFinalScore?.text = totalScore.toString()
-
+    private fun setTotalScore() {
+        totalScore += getScore()
+        binding.tvFinalScore.text = totalScore.toString()
     }
 
-    private val placeModelList = ArrayList<PlaceModel>(5)
-    private fun setPlaceModel()
-    {
+    private fun setPlaceModel() {
         val place = PlaceModel(
             correctPlace,
             selectedPlace,
             getScore(),
             googleMapClass.getDistance()
         )
-
         placeModelList.add(place)
     }
 

@@ -11,7 +11,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.example.worldwanderer.domain.GuessablePlaces
 import java.io.IOException
 import java.util.Locale
-import kotlin.random.Random
 import com.example.worldwanderer.R
 
 class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallback {
@@ -19,7 +18,6 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
     private lateinit var randomLocation: LatLng
     private lateinit var correctCountry: String
     private lateinit var guessEditText: EditText
-//    private lateinit var placeList:Set<LatLng>
     private lateinit var roundTextView: TextView
     private val visitedLocations = mutableSetOf<LatLng>()
     private var round = 1
@@ -54,9 +52,9 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
 
     }
 
-    private fun reverseGeocode(location: LatLng): String? {
+    private fun reverseGeocode(location: LatLng): String {
         val geocoder = Geocoder(this, Locale.getDefault())
-        var countryName = "Unknown Country";
+        var countryName = "Unknown Country"
         try {
             val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
             if (!addresses.isNullOrEmpty()) {
@@ -65,7 +63,7 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
         } catch (e: IOException) {
             Toast.makeText(this, "Reverse geocoding failed", Toast.LENGTH_SHORT).show()
         }
-        return countryName;
+        return countryName
     }
 
 
@@ -107,6 +105,6 @@ class GuessCountryActivity : AppCompatActivity(), OnStreetViewPanoramaReadyCallb
 
     private fun handleGameOver() {
         Toast.makeText(this, "Game over! You ran out of lives.", Toast.LENGTH_SHORT).show()
-        finish() // You might want to handle game over logic here
+        finish()
     }
 }
