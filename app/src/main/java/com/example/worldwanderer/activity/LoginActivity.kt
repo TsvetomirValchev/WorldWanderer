@@ -9,7 +9,6 @@ import android.view.View.OnClickListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.worldwanderer.MainActivity
 import com.example.worldwanderer.R
 import com.example.worldwanderer.databinding.ActivityLoginBinding
 import com.google.android.material.textfield.TextInputEditText

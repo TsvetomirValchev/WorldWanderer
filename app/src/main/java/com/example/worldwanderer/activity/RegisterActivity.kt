@@ -12,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import com.example.worldwanderer.MainActivity
 import com.example.worldwanderer.R
 import com.example.worldwanderer.databinding.ActivityRegisterBinding
 import com.google.android.material.textfield.TextInputLayout

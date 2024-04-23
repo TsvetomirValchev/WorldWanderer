@@ -47,7 +47,13 @@
             tools:ignore="DiscouragedApi"/>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.LeaderboardActivity"
+            android:exported="true"
+            android:screenOrientation="fullSensor"
+            tools:ignore="DiscouragedApi"/>
+
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true"
             android:screenOrientation="fullSensor"
             tools:ignore="DiscouragedApi">
