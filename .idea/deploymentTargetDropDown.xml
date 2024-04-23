@@ -22,7 +22,20 @@
         </State>
       </entry>
       <entry key="app">
-        <State />
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\hehex\.android\avd\Pixel_3_API_29.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-04-22T16:31:31.392953Z" />
+        </State>
       </entry>
     </value>
   </component>
