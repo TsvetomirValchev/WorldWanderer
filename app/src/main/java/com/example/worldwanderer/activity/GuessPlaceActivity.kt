@@ -3,6 +3,7 @@ package com.example.worldwanderer.activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -40,7 +41,8 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     private val placeModelList = ArrayList<PlaceModel>()
     private lateinit var healthProgressBar: ProgressBar
     private lateinit var healthTextView: TextView
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private var scoreboardSlidDown = false
+     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGuessPlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -84,7 +86,9 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
         with(binding) {
             fbOpenMap.setOnClickListener { SlideAnimation.slideUp(mapView) }
             closeMapButton.setOnClickListener { SlideAnimation.slideDown(mapView) }
-            guessButton.setOnClickListener { handleGuessButtonClicked() }
+            guessButton.setOnClickListener {
+                if (scoreboardSlidDown) { SlideAnimation.slideDown(mapView) }
+                else { handleGuessButtonClicked() } }
             guessButton.backgroundTintList = ColorStateList.valueOf(
                 ResourcesCompat.getColor(
                 resources, R.color.purple, null
@@ -152,6 +156,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.fbHintButton.visibility = View.VISIBLE
         }
         round++
+        scoreboardSlidDown = false
         if (round > correctPlaceList.size) {
             Toast.makeText(this, "You have guessed every location", Toast.LENGTH_SHORT).show()
             endGame()
@@ -181,6 +186,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
             pbScore.progress = getScore()
         }
         SlideAnimation.slideDown(scoreBoard)
+        scoreboardSlidDown = true
     }
 
     private fun getScore(): Int {
