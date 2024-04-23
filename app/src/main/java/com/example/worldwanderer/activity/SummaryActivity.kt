@@ -34,7 +34,10 @@ class SummaryActivity : AppCompatActivity(), OnMapReadyCallback {
         binding?.tvFinalScore?.text = "$totalScore points"
         binding?.tvFinalDistance?.text = "${getFinalScore(placesList)} km"
 
-        saveUserScoreToDatabase(totalScore)
+        val currentUser = auth.currentUser
+        val userEmail = currentUser?.email
+        val encodedEmail = encodeEmail(userEmail)
+        saveUserScoreToDatabase(encodedEmail, totalScore)
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.summary_map_fragment)
                 as SupportMapFragment
@@ -79,11 +82,11 @@ class SummaryActivity : AppCompatActivity(), OnMapReadyCallback {
         return finalDistance
     }
 
-    private fun saveUserScoreToDatabase(score: Int) {
-        val currentUser = auth.currentUser
-        val userEmail = currentUser?.email
-        if (userEmail != null) {
-            databaseReference.child(userEmail).setValue(score)
-        }
+    private fun saveUserScoreToDatabase(userEmail: String, score: Int) {
+        databaseReference.child(userEmail).setValue(score)
+    }
+
+    private fun encodeEmail(email: String?): String {
+        return email!!.replace('.', ',')
     }
 }

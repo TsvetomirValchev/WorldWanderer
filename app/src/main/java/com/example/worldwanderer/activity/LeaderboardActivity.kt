@@ -55,8 +55,11 @@ class LeaderboardActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 leaderboardEntries.clear()
                 for (snapshot in dataSnapshot.children) {
-                    val email = snapshot.key ?: ""
+                    val totalEntries = dataSnapshot.childrenCount
+                    val encodedEmail = snapshot.key ?: ""
+                    val email = decodeEmail(encodedEmail)
                     val score = (snapshot.value as? Long)?.toInt() ?: 0
+                    "Total highscores recorded : $totalEntries".also { binding.totalScores.text = it }
                     leaderboardEntries.add(LeaderboardEntry(email, score))
                 }
                 leaderboardEntries.sortByDescending { it.score }
@@ -73,6 +76,10 @@ class LeaderboardActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun updateLeaderboardUI() {
         leaderboardAdapter.notifyDataSetChanged()
+    }
+
+    private fun decodeEmail(encodedEmail: String): String {
+        return encodedEmail.replace(',', '.')
     }
 
 }

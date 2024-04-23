@@ -1,5 +1,6 @@
 package com.example.worldwanderer.adapter
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -8,9 +9,9 @@ import com.example.worldwanderer.domain.LeaderboardEntry
 
 class LeaderboardEntryAdapter(private val data: MutableList<LeaderboardEntry>) : RecyclerView.Adapter<LeaderboardEntryAdapter.ViewHolder>() {
 
-    private lateinit var binding: LeaderboardEntryLayoutBinding
+    //private lateinit var binding: LeaderboardEntryLayoutBinding
 
-    class ViewHolder(private val binding: LeaderboardEntryLayoutBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(binding: LeaderboardEntryLayoutBinding) : RecyclerView.ViewHolder(binding.root)
     {
         private val userEmail: TextView = binding.userEmail
         private val userScore: TextView = binding.bestScore
@@ -22,13 +23,14 @@ class LeaderboardEntryAdapter(private val data: MutableList<LeaderboardEntry>) :
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeaderboardEntryAdapter.ViewHolder {
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = LeaderboardEntryLayoutBinding.inflate(layoutInflater, parent, false)
 
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: LeaderboardEntryAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val entry = data[position]
         holder.setData(entry.email, entry.score)
     }
