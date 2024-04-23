@@ -1,12 +1,15 @@
 package com.example.worldwanderer.activity
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.worldwanderer.R
+import com.example.worldwanderer.adapter.LeaderboardEntryAdapter
 import com.example.worldwanderer.databinding.ActivityLeaderboardBinding
+import com.example.worldwanderer.domain.LeaderboardEntry
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -15,26 +18,29 @@ import com.google.firebase.ktx.Firebase
 
 class LeaderboardActivity : AppCompatActivity() {
 
-    private val database = Firebase.database("https://world-wanderer-e19f2-default-rtdb.europe-west1.firebasedatabase.app/")
-    private val databaseReference = database.getReference("message")
     private lateinit var binding: ActivityLeaderboardBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var totalScoresRecorded: TextView
     private lateinit var userImage: TextView
     private lateinit var userScore: TextView
-    private lateinit var userRank: TextView
-    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var leaderboardEntries: MutableList<LeaderboardEntry>
+    private lateinit var leaderboardAdapter: LeaderboardEntryAdapter
+
+
+    private val database = Firebase.database("https://world-wanderer-e19f2-default-rtdb.europe-west1.firebasedatabase.app/")
+    private val databaseReference = database.getReference("highscores")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLeaderboardBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_leaderboard)
+        setContentView(binding.root)
         initViews()
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        leaderboardEntries = mutableListOf()
+        leaderboardAdapter = LeaderboardEntryAdapter(leaderboardEntries)
+        recyclerView.adapter = leaderboardAdapter
 
-        // Assuming you have a method to fetch data from the database
-        val data = fetchDataFromDatabase()
-
+        fetchDataFromDatabase()
     }
 
     private fun initViews(){
@@ -42,24 +48,32 @@ class LeaderboardActivity : AppCompatActivity() {
         totalScoresRecorded = binding.totalScores
         userImage = binding.userImage
         userScore = binding.bestScore
-        userRank = binding.rank
     }
 
-    private fun fetchDataFromDatabase(): Map<String, Int> {
-
-        val leaderboardData : MutableMap<String, Int> = mutableMapOf(Pair("Az", 100)).toMutableMap()
-
+    private fun fetchDataFromDatabase() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val data = dataSnapshot.value
+                leaderboardEntries.clear()
+                for (snapshot in dataSnapshot.children) {
+                    val email = snapshot.key ?: ""
+                    val score = (snapshot.value as? Long)?.toInt() ?: 0
+                    leaderboardEntries.add(LeaderboardEntry(email, score))
+                }
+                leaderboardEntries.sortByDescending { it.score }
+                updateLeaderboardUI()
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                startActivity(Intent(applicationContext, GuessPlaceActivity::class.java))
+                finish()
             }
         })
+    }
 
-        return leaderboardData
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateLeaderboardUI() {
+        leaderboardAdapter.notifyDataSetChanged()
     }
 
 }
+

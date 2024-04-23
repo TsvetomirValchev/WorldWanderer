@@ -41,10 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding?.leaderboardsBtn?.setOnClickListener {
-            Toast.makeText(
-                this, "This feature will be added in next update",
-                Toast.LENGTH_SHORT
-            ).show()
+            startActivity((Intent(this, LeaderboardActivity::class.java)))
         }
 
         binding?.logoutBtn?.setOnClickListener {
