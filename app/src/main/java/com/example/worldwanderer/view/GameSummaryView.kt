@@ -31,7 +31,7 @@ class GameSummaryView(private val dataList:ArrayList<PlaceModel>):
         val distance = dataList[position].distance
         val score = dataList[position].score
         holder.tvRound.text = (position+1).toString()
-        holder.tvDistance.text = "$distance miles"
+        holder.tvDistance.text = "$distance km"
         holder.tvScore.text = "$score points"
     }
 }
