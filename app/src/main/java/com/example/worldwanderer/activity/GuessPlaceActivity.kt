@@ -22,6 +22,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.SupportStreetViewPanoramaFragment
 import com.google.android.gms.maps.model.LatLng
 import kotlin.math.max
+import kotlin.math.min
 
 class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityGuessPlaceBinding
@@ -123,17 +124,18 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
             googleMapClass.addPolyline(correctPlace, it)
             googleMapClass.zoomOnMap()
             mGoogleMap?.setOnMapClickListener(null)
-            updateHealth(it)
             setTotalScore()
             showScoreBoard()
             setPlaceModel()
+            updateHealth()
             selectedPlace = null
         }
     }
 
-    private fun updateHealth(selectedLocation: LatLng) {
+    private fun updateHealth() {
         val distance = googleMapClass.getDistance()
-        health -= (distance * 2)
+        val healthToDeduct = min((distance.toDouble()*1.6), 4000.0)
+        health -= healthToDeduct.toInt()
         healthProgressBar.progress = health
         healthTextView.text = "Health: $health"
         if (health <= 0) {
@@ -175,7 +177,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
         with(binding) {
             tvScoreRound.text = "Round $round"
             tvScore.text = "You got ${getScore()} points"
-            tvDistance.text = "You are ${googleMapClass.getDistance()} kilometers away"
+            tvDistance.text = "You are ${googleMapClass.getDistance()} km away"
             pbScore.progress = getScore()
         }
         SlideAnimation.slideDown(scoreBoard)
