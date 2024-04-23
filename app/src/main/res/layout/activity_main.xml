@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/stars"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/gif_image_view"

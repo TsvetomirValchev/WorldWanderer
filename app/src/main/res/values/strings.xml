@@ -36,4 +36,9 @@
     <string name="guess_country">Guess Country</string>
     <string name="enter_the_country_name">Enter the country name</string>
     <string name="round_number_lives_number">Round 1 / Lives: 3</string>
+    <string name="total_highscores_recorded">Total highscores Recorded: 0</string>
+    <string name="user_initials">A</string>
+    <string name="your_email">Your email</string>
+    <string name="best_score">Best score: 0</string>
+    <string name="rank">Rank - N/A</string>
 </resources>

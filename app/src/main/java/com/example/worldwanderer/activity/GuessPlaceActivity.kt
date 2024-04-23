@@ -42,6 +42,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var healthProgressBar: ProgressBar
     private lateinit var healthTextView: TextView
     private var scoreboardSlidDown = false
+
      override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGuessPlaceBinding.inflate(layoutInflater)

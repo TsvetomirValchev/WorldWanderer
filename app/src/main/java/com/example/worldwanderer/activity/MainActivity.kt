@@ -1,13 +1,11 @@
-package com.example.worldwanderer
+package com.example.worldwanderer.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
-import com.example.worldwanderer.activity.GuessCountryActivity
-import com.example.worldwanderer.activity.GuessPlaceActivity
-import com.example.worldwanderer.activity.LoginActivity
+import com.example.worldwanderer.R
 import com.example.worldwanderer.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -43,10 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding?.leaderboardsBtn?.setOnClickListener {
-            Toast.makeText(
-                this, "This feature will be added in next update",
-                Toast.LENGTH_SHORT
-            ).show()
+            startActivity((Intent(this, LeaderboardActivity::class.java)))
         }
 
         binding?.logoutBtn?.setOnClickListener {

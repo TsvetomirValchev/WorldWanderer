@@ -8,7 +8,6 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.worldwanderer.MainActivity
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.example.worldwanderer.domain.GuessablePlaces

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/user_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/baseline_account_circle_24"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/your_email"
+        android:textColor="@color/black"
+        app:layout_constraintLeft_toRightOf="@+id/user_image"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+    </TextView>
+
+
+    <TextView
+        android:id="@+id/best_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/best_score"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toRightOf="@+id/user_image"
+        app:layout_constraintTop_toBottomOf="@+id/user_email">
+    </TextView>
+
+    <View
+        android:backgroundTint="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintLeft_toRightOf="@id/user_image"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_image"
+        >
+    </View>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
