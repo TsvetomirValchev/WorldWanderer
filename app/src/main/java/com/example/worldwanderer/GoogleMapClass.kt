@@ -22,6 +22,7 @@ class GoogleMapClass(private val mGoogleMap: GoogleMap?, private val context:Con
 
     private var correctPlace = LatLng(0.0,0.0)
     private var selectedPlace:LatLng? = null
+    private var placeMarker:Marker? = null
 
     fun setSelectedPlace(place:LatLng?)
     {
@@ -46,7 +47,6 @@ class GoogleMapClass(private val mGoogleMap: GoogleMap?, private val context:Con
         return (result[0]/1000).roundToInt()
     }
 
-    private var placeMarker:Marker? = null
     fun addSelectedPlaceMarker(position:LatLng)
     {
         placeMarker?.remove()
