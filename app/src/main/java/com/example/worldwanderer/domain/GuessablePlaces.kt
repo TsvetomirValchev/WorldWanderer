@@ -60,7 +60,7 @@ object GuessablePlaces {
         LatLng(68.50860591509297, 27.482234739913483),             // Finland
         LatLng(13.413332971246504, 103.86686841534268),            // Angkor Wat, Cambodia
         LatLng(48.677370148322375, 20.976620110872062),            // Jasovská Cave, Slovak Karst, Slovakia
-        LatLng(65.48438924102332, -145.41217855926362),            // Pinnel Trail, Alaska
+        LatLng(64.8330768697364, -147.72854008153251),             // Fairbanks, Alaska
         LatLng(34.66873238168148, 135.50048215719696)              //Dōtonbori, Japan
     )
 
