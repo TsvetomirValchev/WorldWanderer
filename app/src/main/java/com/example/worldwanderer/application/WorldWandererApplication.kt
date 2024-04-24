@@ -7,6 +7,7 @@ class WorldWandererApplication : Application() {
 
         override fun onCreate() {
             super.onCreate()
+            // Initialize Firebase when the application is created
             FirebaseApp.initializeApp(this)
         }
 
