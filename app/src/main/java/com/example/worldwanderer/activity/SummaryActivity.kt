@@ -8,30 +8,26 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.worldwanderer.adapter.GameSummaryAdapter
 import com.example.worldwanderer.GoogleMapClass
 import com.example.worldwanderer.R
+import com.example.worldwanderer.database.DatabaseManager
 import com.example.worldwanderer.databinding.ActivitySummaryBinding
 import com.example.worldwanderer.domain.PlaceModel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 class SummaryActivity : AppCompatActivity(), OnMapReadyCallback {
     // View binding and Firebase instances
     private var binding: ActivitySummaryBinding? = null
     private lateinit var placesList: ArrayList<PlaceModel>
     private val auth = FirebaseAuth.getInstance()
-    private val database = Firebase.database("https://world-wanderer-e19f2-default-rtdb.europe-west1.firebasedatabase.app/")
-    private val databaseReference = database.getReference("highscores")
+    private lateinit var databaseManager: DatabaseManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Inflate the layout using view binding
+        databaseManager = DatabaseManager(this)
         binding = ActivitySummaryBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-
-        // Retrieve data from intent
         val totalScore: Int = intent.getIntExtra("totalScore", 0)
         placesList = intent.getParcelableArrayListExtra("dataList")!!
 
@@ -45,10 +41,9 @@ class SummaryActivity : AppCompatActivity(), OnMapReadyCallback {
         // Get current user's email and encode it
         val currentUser = auth.currentUser
         val userEmail = currentUser?.email
-        val encodedEmail = encodeEmail(userEmail)
-
+        val encodedEmail = databaseManager.encodeEmail(userEmail)
         // Save user's score to the database
-        saveUserScoreToDatabase(encodedEmail, totalScore)
+        databaseManager.saveUserScoreToDatabase(encodedEmail, totalScore)
 
         // Initialize and set up the Google Map fragment
         val mapFragment = supportFragmentManager.findFragmentById(R.id.summary_map_fragment)
@@ -96,13 +91,4 @@ class SummaryActivity : AppCompatActivity(), OnMapReadyCallback {
         return finalDistance
     }
 
-    private fun saveUserScoreToDatabase(userEmail: String, score: Int) {
-        // Save user's score to the Firebase database
-        databaseReference.child(userEmail).setValue(score)
-    }
-
-    private fun encodeEmail(email: String?): String {
-        // Encode email for Firebase database use
-        return email!!.replace('.', ',')
-    }
 }

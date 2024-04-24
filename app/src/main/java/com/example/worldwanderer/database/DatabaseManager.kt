@@ -16,40 +16,26 @@ import com.google.firebase.database.ValueEventListener
 
 class DatabaseManager(private val context: Context) {
 
-    // Reference to the Firebase database
-    private val databaseReference: DatabaseReference =
-        FirebaseDatabase.getInstance("https://world-wanderer-e19f2-default-rtdb.europe-west1.firebasedatabase.app/").getReference("highscores")
-
-    // Adapter class for the leaderboard entries
+    private val databaseReference: DatabaseReference = FirebaseDatabase.getInstance("https://world-wanderer-e19f2-default-rtdb.europe-west1.firebasedatabase.app/").getReference("highscores")
     lateinit var leaderboardAdapter: LeaderboardEntryAdapter
 
-    // Fetches leaderboard entries from the database
+
     fun fetchDataFromDatabase(leaderboardEntries: MutableList<LeaderboardEntry>, binding: ActivityLeaderboardBinding) {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Clear the existing list of leaderboard entries
                 leaderboardEntries.clear()
-                // Iterate through each child node in the database snapshot
                 for (snapshot in dataSnapshot.children) {
-                    // Retrieve the total number of entries in the leaderboard
                     val totalEntries = dataSnapshot.childrenCount
-                    // Retrieve the encoded email and decode it
                     val encodedEmail = snapshot.key ?: ""
-                    // Decode the email retrieved from the database, so that it looks like an actual email in the view
                     val email = decodeEmail(encodedEmail)
-                    // Retrieve the score associated with the email
                     val score = (snapshot.value as? Long)?.toInt() ?: 0
-                    // Update the total highscores recorded in the UI
-                    "Total highscores recorded : $totalEntries".also {
-                        binding.totalScores.text = it
-                    }
-                    // Add the leaderboard entry to the list
+                    "Total highscores recorded : $totalEntries".also { binding.totalScores.text = it }
                     leaderboardEntries.add(LeaderboardEntry(email, score))
-                    // Updates the UI with the new leaderboard data
-                    updateLeaderboardUI()
                 }
+                leaderboardEntries.sortByDescending { it.score }
+                updateLeaderboardUI()
             }
-            // Handle database error by starting MainActivity
+
             override fun onCancelled(error: DatabaseError) {
                 context.startActivity(Intent(context, MainActivity::class.java))
                 (context as AppCompatActivity).finish()
@@ -93,6 +79,5 @@ class DatabaseManager(private val context: Context) {
     private fun updateLeaderboardUI() {
         leaderboardAdapter.notifyDataSetChanged()
     }
-
 
 }
