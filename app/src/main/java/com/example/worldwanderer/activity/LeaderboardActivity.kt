@@ -22,7 +22,8 @@ class LeaderboardActivity : AppCompatActivity() {
     private lateinit var userScore: TextView
     private lateinit var userEmail: TextView
     private val auth = FirebaseAuth.getInstance()
-
+    private val currentUser = auth.currentUser
+    private var currentUserEmail = "${currentUser?.email}"
     // Data and Firebase
     private lateinit var leaderboardEntries: MutableList<LeaderboardEntry>
     private lateinit var databaseManager: DatabaseManager
@@ -52,18 +53,25 @@ class LeaderboardActivity : AppCompatActivity() {
         userImage = binding.userImage
         userScore = binding.bestScore
         userEmail = binding.yourEmail
-        val currentUser = auth.currentUser
-        binding.yourEmail.text = "${currentUser?.email}"
+        binding.yourEmail.text = currentUserEmail
+        //We encode the email here because the database saves the emails with , sign instead of . sign
+        getCurrentUserHighscore { highscore ->
+            // Update the UI with the highscore value
+            binding.bestScore.text = highscore
+        }
     }
 
     private fun fetchDataFromDatabase() {
         databaseManager.fetchDataFromDatabase(leaderboardEntries, binding)
     }
 
-    private fun decodeEmail(encodedEmail: String): String {
-        // Decode encoded email
-        return encodedEmail.replace(',', '.')
+    private fun getCurrentUserHighscore(callback: (String) -> Unit) {
+        databaseManager.fetchUserHighscoreFromDatabase(currentUserEmail).observe(this) { highscore ->
+            val scoreText = highscore?.toString() ?: "0"
+            callback(scoreText)
+        }
     }
+
 
 }
 

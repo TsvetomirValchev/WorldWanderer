@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.worldwanderer.activity.MainActivity
 import com.example.worldwanderer.adapter.LeaderboardEntryAdapter
 import com.example.worldwanderer.databinding.ActivityLeaderboardBinding
@@ -63,6 +65,34 @@ class DatabaseManager(private val context: Context) {
                 }
             })
     }
+
+    fun fetchUserHighscoreFromDatabase(email: String): LiveData<Int> {
+        val highscoreLiveData = MutableLiveData<Int>()
+
+        // Assuming "highscores" is the node where highscores are stored in the database
+        val userHighscoreRef = databaseReference.child(encodeEmail(email))
+
+        userHighscoreRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Check if the dataSnapshot exists and contains a value
+                if (dataSnapshot.exists()) {
+                    val highscore = dataSnapshot.getValue(Int::class.java)
+                    highscoreLiveData.postValue(highscore)
+                } else {
+                    // If no data exists for the user, post null
+                    highscoreLiveData.postValue(null)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Post null in case of error
+                highscoreLiveData.postValue(null)
+            }
+        })
+
+        return highscoreLiveData
+    }
+
 
     // Encodes an email address for use as a database key
     fun encodeEmail(email: String?): String {
