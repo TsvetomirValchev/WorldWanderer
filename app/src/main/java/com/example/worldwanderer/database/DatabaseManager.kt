@@ -69,7 +69,6 @@ class DatabaseManager(private val context: Context) {
     fun fetchUserHighscoreFromDatabase(email: String): LiveData<Int> {
         val highscoreLiveData = MutableLiveData<Int>()
 
-        // Assuming "highscores" is the node where highscores are stored in the database
         val userHighscoreRef = databaseReference.child(encodeEmail(email))
 
         userHighscoreRef.addListenerForSingleValueEvent(object : ValueEventListener {
