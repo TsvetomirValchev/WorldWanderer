@@ -3,7 +3,6 @@ package com.example.worldwanderer.activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -13,7 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.example.worldwanderer.domain.GuessablePlaces
 import com.example.worldwanderer.GoogleMapClass
 import com.example.worldwanderer.R
-import com.example.worldwanderer.view.SlideAnimation
+import com.example.worldwanderer.utils.SlideAnimation
 import com.example.worldwanderer.databinding.ActivityGuessPlaceBinding
 import com.example.worldwanderer.domain.PlaceModel
 import com.google.android.gms.maps.GoogleMap
@@ -26,10 +25,15 @@ import kotlin.math.max
 import kotlin.math.min
 
 class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
+    // Views and UI elements
     private lateinit var binding: ActivityGuessPlaceBinding
     private lateinit var mapView: View
     private lateinit var scoreBoard: View
     private lateinit var streetView: StreetViewPanorama
+    private lateinit var healthProgressBar: ProgressBar
+    private lateinit var healthTextView: TextView
+
+    // Game variables
     private var mGoogleMap: GoogleMap? = null
     private lateinit var googleMapClass: GoogleMapClass
     private var round = 1
@@ -39,11 +43,9 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var correctPlaceList: List<LatLng>
     private var totalScore = 0
     private val placeModelList = ArrayList<PlaceModel>()
-    private lateinit var healthProgressBar: ProgressBar
-    private lateinit var healthTextView: TextView
     private var scoreboardSlidDown = false
 
-     override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGuessPlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -55,6 +57,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initializeViews() {
+        // Initialize views from layout
         mapView = binding.clMapView
         scoreBoard = binding.llScoreBoard
         correctPlaceList = GuessablePlaces.getFamousPlaceList().toList()
@@ -62,6 +65,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initializeHealth() {
+        // Initialize health progress bar and text view
         healthProgressBar = findViewById(R.id.pb_health)
         healthProgressBar.max = 5000
         healthProgressBar.progress = health
@@ -70,6 +74,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initializeMap() {
+        // Initialize Street View and Google Map
         val streetViewPanoramaFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_StreetView)
                     as SupportStreetViewPanoramaFragment?
@@ -84,6 +89,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initializeListeners() {
+        // Set up click listeners for buttons
         with(binding) {
             fbOpenMap.setOnClickListener { SlideAnimation.slideUp(mapView) }
             closeMapButton.setOnClickListener { SlideAnimation.slideDown(mapView) }
@@ -92,8 +98,8 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
                 else { handleGuessButtonClicked() } }
             guessButton.backgroundTintList = ColorStateList.valueOf(
                 ResourcesCompat.getColor(
-                resources, R.color.purple, null
-            ))
+                    resources, R.color.purple, null
+                ))
             btnNextRound.setOnClickListener { handleNextRoundButtonClicked() }
             fbHintButton.setOnClickListener { handleHintButtonClicked() }
             fbHintButton.backgroundTintList = ColorStateList.valueOf(
@@ -104,12 +110,14 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        // Callback when the Google Map is ready
         mGoogleMap = googleMap
         googleMapClass = GoogleMapClass(googleMap, this@GuessPlaceActivity)
         setMapClickListener()
     }
 
     private fun setMapClickListener() {
+        // Set click listener for selecting a place on the map
         mGoogleMap?.setOnMapClickListener {
             selectedPlace = it
             googleMapClass.setSelectedPlace(it)
@@ -120,6 +128,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun handleGuessButtonClicked() {
+        // Handle guess button click
         selectedPlace?.let {
             googleMapClass.addBlueMarker(correctPlace)
             googleMapClass.addPolyline(correctPlace, it)
@@ -134,27 +143,28 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun updateHealth() {
+        // Update health based on the distance between correct and selected place
         val distance = googleMapClass.getDistance()
         val healthToDeduct = min((distance.toDouble()*1.6), 4000.0)
         health -= healthToDeduct.toInt()
         healthProgressBar.progress = health
         healthTextView.text = "Health: $health"
         if (health <= 0) {
-            Toast.makeText(this, "You have ran out of health", Toast.LENGTH_SHORT).show()
+            // End game if health reaches 0
+            Toast.makeText(this, "You have run out of health", Toast.LENGTH_SHORT).show()
             endGame()
         }
-
     }
 
     private fun handleNextRoundButtonClicked() {
-
-        if (round == 1)
-        {
+        // Handle next round button click
+        if (round == 1) {
             binding.fbHintButton.visibility = View.VISIBLE
         }
         round++
         scoreboardSlidDown = false
         if (round > correctPlaceList.size) {
+            // End game if all rounds are completed
             Toast.makeText(this, "You have guessed every location", Toast.LENGTH_SHORT).show()
             endGame()
         }
@@ -171,11 +181,13 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun handleHintButtonClicked() {
+        // Handle hint button click
         googleMapClass.addCircle()
         binding.fbHintButton.visibility = View.GONE
     }
 
     private fun showScoreBoard() {
+        // Show the scoreboard with score, distance, and progress bar
         with(binding) {
             tvScoreRound.text = "Round $round"
             tvScore.text = "You got ${getScore()} points"
@@ -187,16 +199,19 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getScore(): Int {
+        // Calculate score based on distance
         val distance = googleMapClass.getDistance()
         return max(0, 5000 - 2 * distance)
     }
 
     private fun setTotalScore() {
+        // Update total score
         totalScore += getScore()
         binding.tvFinalScore.text = totalScore.toString()
     }
 
     private fun setPlaceModel() {
+        // Set PlaceModel for the current round
         val place = PlaceModel(
             correctPlace,
             selectedPlace,
@@ -207,6 +222,7 @@ class GuessPlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun endGame() {
+        // End the game and start the summary activity
         val intent = Intent(this, SummaryActivity::class.java)
         intent.putExtra("totalScore", totalScore)
         intent.putExtra("dataList", placeModelList)

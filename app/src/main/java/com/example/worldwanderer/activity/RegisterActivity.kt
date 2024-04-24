@@ -19,27 +19,33 @@ import com.google.firebase.auth.FirebaseAuth
 
 class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeListener {
 
+    // View binding and Firebase authentication instance
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var clickToLogin: TextView
 
-
     override fun onStart() {
         super.onStart()
+        // Check if user is already signed in
         val currentUser = auth.currentUser
         if (currentUser != null) {
+            // Redirect to main activity if user is already signed in
             val changeToApp = Intent(applicationContext, MainActivity::class.java)
             startActivity(changeToApp)
             finish()
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Inflate the layout using view binding
         binding = ActivityRegisterBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        // Initialize Firebase authentication
         auth = FirebaseAuth.getInstance()
+
+        // Initialize views and set listeners
         clickToLogin = findViewById(R.id.click_to_login)
         binding.registerBtn.setOnClickListener(this)
         binding.clickToLogin.setOnClickListener(this)
@@ -49,26 +55,27 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
     }
 
     override fun onClick(view: View?) {
-
+        // Handle click events for buttons
         val email: String = binding.emailEt.text.toString()
-        val password: String = binding.passwordEt.text.toString();
+        val password: String = binding.passwordEt.text.toString()
 
         when (view!!.id) {
             R.id.registerBtn -> {
+                // Register button clicked
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
+                        // Check if registration is valid and successful
                         if (isValidRegistration() && task.isSuccessful) {
                             Toast.makeText(
                                 baseContext,
                                 "Account created.",
-                                Toast.LENGTH_SHORT,
+                                Toast.LENGTH_SHORT
                             ).show()
                             val changeToLogin =
                                 Intent(applicationContext, LoginActivity::class.java)
                             startActivity(changeToLogin)
                             finish()
                         } else {
-
                             Toast.makeText(
                                 baseContext,
                                 "Authentication failed.",
@@ -79,6 +86,7 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
             }
 
             R.id.click_to_login -> {
+                // Click to login link clicked
                 val changeToLogin = Intent(applicationContext, LoginActivity::class.java)
                 startActivity(changeToLogin)
                 finish()
@@ -87,15 +95,17 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
     }
 
     override fun onFocusChange(view: View?, hasFocus: Boolean) {
+        // Handle focus changes for input fields
         if (view != null) {
             when (view.id) {
                 R.id.emailEt -> {
-
+                    // Email input field
                     if (hasFocus) {
                         binding.emailTil.isErrorEnabled = false
                     }
 
                     if (validateEmail()) {
+                        // Set email input field icon if valid
                         binding.emailTil.apply {
                             setStartIconDrawable(R.drawable.baseline_check_box_24)
                             setStartIconTintList(
@@ -107,16 +117,16 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
                             )
                         }
                     }
-
                 }
 
                 R.id.passwordEt -> {
-
+                    // Password input field
                     if (hasFocus) {
                         binding.passwordTil.isErrorEnabled = false
                     }
 
                     if (validatePassword() && binding.confirmPasswordEt.text!!.isEmpty() && validatePasswordMatching()) {
+                        // Set password input field icon if valid
                         binding.passwordTil.apply {
                             setStartIconDrawable(R.drawable.baseline_check_box_24)
                             setStartIconTintList(
@@ -128,18 +138,16 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
                             )
                         }
                     }
-
                 }
 
                 R.id.confirmPasswordEt -> {
-
+                    // Confirm password input field
                     if (hasFocus) {
                         binding.confirmPasswordTil.isErrorEnabled = false
                     }
 
-                    if (validatePasswordMatching() && binding.passwordEt.text.toString()
-                            .isNotEmpty()
-                    ) {
+                    if (validatePasswordMatching() && binding.passwordEt.text.toString().isNotEmpty()) {
+                        // Set confirm password input field icon if valid
                         binding.confirmPasswordTil.apply {
                             setStartIconDrawable(R.drawable.baseline_check_box_24)
                             setStartIconTintList(
@@ -151,15 +159,13 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
                             )
                         }
                     }
-
-
                 }
             }
         }
     }
 
-
     private fun validateEmail(): Boolean {
+        // Validate email format
         var errorMessage: String? = ""
         val emailInput: String = binding.emailEt.text.toString()
 
@@ -177,6 +183,7 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
     }
 
     private fun validatePassword(): Boolean {
+        // Validate password length
         var errorMessage: String? = ""
         val passwordInput: String = binding.passwordEt.text.toString()
 
@@ -194,12 +201,13 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
     }
 
     private fun validatePasswordMatching(): Boolean {
+        // Validate password confirmation
         var errorMessage: String? = ""
         val passwordInput: String = binding.passwordEt.text.toString()
         val confirmPasswordInput: String = binding.confirmPasswordEt.text.toString()
 
         if (passwordInput != confirmPasswordInput) {
-            errorMessage = "The passwords does not match!"
+            errorMessage = "The passwords do not match!"
         }
 
         printErrorIfPresent(errorMessage, binding.confirmPasswordTil)
@@ -208,6 +216,7 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
     }
 
     private fun printErrorIfPresent(errorMessage: String?, field: TextInputLayout) {
+        // Print error message if present
         if (errorMessage != "") {
             field.apply {
                 isErrorEnabled = true
@@ -217,6 +226,7 @@ class RegisterActivity : AppCompatActivity(), OnClickListener, OnFocusChangeList
     }
 
     private fun isValidRegistration(): Boolean {
+        // Check if registration input is valid
         var isValid = true
 
         if (!validateEmail()) isValid = false

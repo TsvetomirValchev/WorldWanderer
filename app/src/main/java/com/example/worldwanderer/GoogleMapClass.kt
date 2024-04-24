@@ -18,103 +18,107 @@ import com.google.android.gms.maps.model.PolylineOptions
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class GoogleMapClass(private val mGoogleMap: GoogleMap?, private val context:Context) {
+class GoogleMapClass(private val mGoogleMap: GoogleMap?, private val context: Context) {
 
-    private var correctPlace = LatLng(0.0,0.0)
-    private var selectedPlace:LatLng? = null
-    private var placeMarker:Marker? = null
+    // Define variables to store the correct place and selected place
+    private var correctPlace = LatLng(0.0, 0.0)
+    private var selectedPlace: LatLng? = null
+    private var placeMarker: Marker? = null
 
-    fun setSelectedPlace(place:LatLng?)
-    {
+    // Method to set the selected place
+    fun setSelectedPlace(place: LatLng?) {
         this.selectedPlace = place
     }
 
-    fun setCorrectPlace(place:LatLng)
-    {
+    // Method to set the correct place
+    fun setCorrectPlace(place: LatLng) {
         this.correctPlace = place
     }
 
-    fun getDistance():Int
-    {
+    // Method to calculate the distance between selected and correct places
+    fun getDistance(): Int {
         val result = FloatArray(1)
         Location.distanceBetween(
-            selectedPlace?.latitude!!,
-            selectedPlace?.longitude!!,
+            selectedPlace?.latitude ?: 0.0,
+            selectedPlace?.longitude ?: 0.0,
             correctPlace.latitude,
             correctPlace.longitude,
             result
         )
-        return (result[0]/1000).roundToInt()
+        return (result[0] / 1000).roundToInt() // Convert distance to kilometers and round it
     }
 
-    fun addSelectedPlaceMarker(position:LatLng)
-    {
-        placeMarker?.remove()
-        placeMarker = mGoogleMap?.addMarker(MarkerOptions()
-            .position(position)
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_pin_50px))
+    // Method to add a marker for the selected place
+    fun addSelectedPlaceMarker(position: LatLng) {
+        placeMarker?.remove() // Remove existing marker if present
+        placeMarker = mGoogleMap?.addMarker(
+            MarkerOptions()
+                .position(position)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_pin_50px)) // Set marker icon
         )
     }
 
-    fun addBlueMarker(position: LatLng)
-    {
-        mGoogleMap?.addMarker(MarkerOptions()
-            .position(position)
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.blue_pin_50px))
+    // Method to add a blue marker for a given position
+    fun addBlueMarker(position: LatLng) {
+        mGoogleMap?.addMarker(
+            MarkerOptions()
+                .position(position)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.blue_pin_50px)) // Set marker icon
         )
     }
 
-    fun addRedMarker(position: LatLng)
-    {
-        mGoogleMap?.addMarker(MarkerOptions()
-            .position(position)
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_pin_50px))
+    // Method to add a red marker for a given position
+    fun addRedMarker(position: LatLng) {
+        mGoogleMap?.addMarker(
+            MarkerOptions()
+                .position(position)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_pin_50px)) // Set marker icon
         )
     }
 
-    fun addCircle()
-    {
+    // Method to add a circle on the map
+    fun addCircle() {
         val mLat = correctPlace.latitude
         val mLong = correctPlace.longitude
-        val position = LatLng(mLat + Random.nextDouble(0.01,0.1),
-            mLong + Random.nextDouble(0.01,0.1)
-            )
-        mGoogleMap?.addCircle(CircleOptions()
-            .center(position)
-            .fillColor(ContextCompat.getColor(context,R.color.trans_yellow))
-            .strokeColor(ContextCompat.getColor(context,R.color.yellow))
-            .radius(15000.0)
+        val position = LatLng(mLat + Random.nextDouble(0.01, 0.1), mLong + Random.nextDouble(0.01, 0.1))
+        mGoogleMap?.addCircle(
+            CircleOptions()
+                .center(position)
+                .fillColor(ContextCompat.getColor(context, R.color.trans_yellow)) // Set circle fill color
+                .strokeColor(ContextCompat.getColor(context, R.color.yellow)) // Set circle stroke color
+                .radius(15000.0) // Set circle radius
         )
 
-        zoomOnMap(position,10f)
+        zoomOnMap(position, 10f) // Zoom on the map to the specified position
     }
 
-    fun zoomOnMap()
-    {
+    // Method to zoom on the map
+    fun zoomOnMap() {
         val builder = LatLngBounds.builder()
         builder.include(selectedPlace!!)
         builder.include(correctPlace)
         val bounds = builder.build()
-        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds,200)
-        mGoogleMap?.animateCamera(cameraUpdate)
+        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200)
+        mGoogleMap?.animateCamera(cameraUpdate) // Animate camera to zoom on the map within the specified bounds
     }
 
-    fun zoomOnMap(position:LatLng,zoomLevel:Float)
-    {
-        val newLatLngZoom = CameraUpdateFactory.newLatLngZoom(position,zoomLevel)
-        mGoogleMap?.animateCamera(newLatLngZoom)
+    // Method to zoom on the map to a specific position with a specified zoom level
+    fun zoomOnMap(position: LatLng, zoomLevel: Float) {
+        val newLatLngZoom = CameraUpdateFactory.newLatLngZoom(position, zoomLevel)
+        mGoogleMap?.animateCamera(newLatLngZoom) // Animate camera to zoom on the map to the specified position with the specified zoom level
     }
 
-    fun addPolyline(correctPlace:LatLng, selectedPlace:LatLng)
-    {
-        val dash:PatternItem = Dash(20f)
-        val gap:PatternItem = Gap(20f)
-        val linePattern = listOf(gap,dash)
+    // Method to add a polyline between two points
+    fun addPolyline(correctPlace: LatLng, selectedPlace: LatLng) {
+        val dash: PatternItem = Dash(20f)
+        val gap: PatternItem = Gap(20f)
+        val linePattern = listOf(gap, dash) // Define line pattern
 
-        mGoogleMap?.addPolyline(PolylineOptions()
-            .add(correctPlace,selectedPlace)
-            .color(ContextCompat.getColor(context,R.color.black))
-            .pattern(linePattern)
+        mGoogleMap?.addPolyline(
+            PolylineOptions()
+                .add(correctPlace, selectedPlace) // Add polyline between correct and selected places
+                .color(ContextCompat.getColor(context, R.color.black)) // Set polyline color
+                .pattern(linePattern) // Set line pattern
         )
     }
 }

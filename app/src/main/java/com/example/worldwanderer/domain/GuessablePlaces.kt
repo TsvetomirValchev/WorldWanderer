@@ -64,6 +64,7 @@ object GuessablePlaces {
         LatLng(34.66873238168148, 135.50048215719696)              //Dōtonbori, Japan
     )
 
+    // Gets a random place from the places above.
     fun getFamousPlaceList():Set<LatLng>
     {
         val list = mutableSetOf<LatLng>()
